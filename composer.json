@@ -1,0 +1,21 @@
+{
+  "name": "saddamhshovon/wsd",
+  "description": "Task for Wall Street Dogs",
+  "version": "1.0.0",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Saddam Hossen",
+      "email": "saddamhshovon@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require-dev": {
+    "laravel/pint": "^1.16"
+  }
+}
