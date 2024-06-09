@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Core\App;
-use App\Core\Session;
-use App\Core\Database;
 use App\Core\Authenticator;
+use App\Core\Database;
+use App\Core\Session;
 use App\Http\Requests\LoginRequest;
 
 class AuthenticationController
@@ -16,7 +16,7 @@ class AuthenticationController
     {
         $this->db = App::resolve(Database::class);
     }
-    
+
     public function view()
     {
         return view('auth/login', [
