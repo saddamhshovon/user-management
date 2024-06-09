@@ -6,7 +6,7 @@ use App\Core\Database;
 
 $container = new Container();
 
-$container->bind('App\Core\Database', function () {
+$container->bind(Database::class, function () {
     $databaseConfig = require base_path('config/database.php');
 
     return new Database($databaseConfig['mariadb']);

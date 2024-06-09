@@ -8,12 +8,12 @@ class Router
 {
     protected $routes = [];
 
-    public function add(string $method, string $uri, array $controller)
+    private function add(string $httpMethod, string $uri, array $controller)
     {
         $this->routes[] = [
             'uri' => $uri,
             'controller' => $controller,
-            'method' => $method,
+            'httpMethod' => $httpMethod,
             'middleware' => null,
         ];
 
@@ -45,46 +45,43 @@ class Router
         return $this->add('PUT', $uri, $controller);
     }
 
-    public function only(string $key)
+    public function middleware(string $key)
     {
         $this->routes[array_key_last($this->routes)]['middleware'] = $key;
 
         return $this;
     }
 
-    public function route(string $uri, string $method)
+    public function route(string $uri, string $httpMethod)
     {
         foreach ($this->routes as $route) {
-            if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
+            // Prepare regular expression pattern to match dynamic segments
+            $pattern = preg_replace('/\/{\w+}/', '/(\w+)', $route['uri']);
+            $pattern = str_replace('/', '\/', $pattern);
+            $pattern = '/^'.$pattern.'$/';
+
+            // Check if URI matches the pattern and HTTP method matches
+            if (preg_match($pattern, $uri, $matches) && $route['httpMethod'] === strtoupper($httpMethod)) {
+                array_shift($matches); // Remove full match
+
                 Middleware::resolve($route['middleware']);
+                [$class, $classMethod] = $route['controller'];
 
-                if (is_array($route['controller'])) {
-                    // If the controller is an array, assume it's a class-based controller
-                    [$class, $method] = $route['controller'];
-                    if (class_exists($class) && method_exists($class, $method)) {
-                        $controllerInstance = new $class();
+                if (class_exists($class) && method_exists($class, $classMethod)) {
+                    $controllerInstance = new $class();
 
-                        return $controllerInstance->$method();
-                    }
-                    throw new \Exception("No matching controller found for key '{$class}'.");
+                    // Call controller method with dynamic parameters
+                    return call_user_func_array([$controllerInstance, $classMethod], $matches);
                 }
+                throw new \Exception("No matching controller found for key '{$class}'.");
             }
         }
 
-        $this->abort();
+        abort(404);
     }
 
     public function previousUrl(): string
     {
         return $_SERVER['HTTP_REFERER'];
-    }
-
-    protected function abort(int $code = 404): never
-    {
-        http_response_code($code);
-
-        require base_path("resources/views/{$code}.php");
-
-        exit();
     }
 }

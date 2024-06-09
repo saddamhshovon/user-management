@@ -4,18 +4,18 @@ namespace App\Http\MiddleWare;
 
 class Middleware
 {
-    public const MAP = [
+    public const MIDDLEWARES = [
         'guest' => Guest::class,
         'auth' => Authenticated::class,
     ];
 
-    public static function resolve($key): void
+    public static function resolve(?string $key): void
     {
         if (! $key) {
             return;
         }
 
-        $middleware = static::MAP[$key] ?? false;
+        $middleware = static::MIDDLEWARES[$key] ?? false;
 
         if (! $middleware) {
             throw new \Exception("No matching middleware found for key '{$key}'.");

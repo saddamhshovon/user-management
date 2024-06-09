@@ -3,12 +3,13 @@
 namespace App\Core;
 
 use PDO;
+use PDOStatement;
 
 class Database
 {
-    public $connection;
+    public PDO $connection;
 
-    public $statement;
+    public PDOStatement $statement;
 
     public function __construct($config, $username = 'root', $password = '')
     {
@@ -16,6 +17,8 @@ class Database
 
         $this->connection = new PDO($dsn, $username, $password, [
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_EMULATE_PREPARES => false,
         ]);
     }
 
@@ -33,7 +36,7 @@ class Database
         return $this->statement->fetchAll();
     }
 
-    public function find(): array
+    public function find(): array|bool
     {
         return $this->statement->fetch();
     }

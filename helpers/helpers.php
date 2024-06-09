@@ -17,11 +17,11 @@ function urlIs(string $value): bool
     return $_SERVER['REQUEST_URI'] === $value;
 }
 
-function abort(int $code = 404): never
+function abort(int $code = 404, array $attributes = []): never
 {
     http_response_code($code);
-
-    require base_path("views/{$code}.php");
+    extract($attributes);
+    require base_path("resources/views/errors/{$code}.view.php");
 
     exit();
 }
