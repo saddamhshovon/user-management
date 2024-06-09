@@ -140,19 +140,19 @@
     </div>
 
     <div class="pagination">
-        <?php if ($currentPage > 1): ?>
+        <?php if ($currentPage > 1) { ?>
             <a href="/users?page=<?= $currentPage - 1 ?>&search=<?= htmlspecialchars($search) ?>">&laquo; Previous</a>
-        <?php endif; ?>
+        <?php } ?>
 
-        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <?php for ($i = 1; $i <= $totalPages; $i++) { ?>
             <a href="/users?page=<?= $i ?>&search=<?= htmlspecialchars($search) ?>" class="<?= $i == $currentPage ? 'current' : '' ?>">
                 <?= $i ?>
             </a>
-        <?php endfor; ?>
+        <?php } ?>
 
-        <?php if ($currentPage < $totalPages): ?>
+        <?php if ($currentPage < $totalPages) { ?>
             <a href="/users?page=<?= $currentPage + 1 ?>&search=<?= htmlspecialchars($search) ?>">Next &raquo;</a>
-        <?php endif; ?>
+        <?php } ?>
     </div>
 </div>
 

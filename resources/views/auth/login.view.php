@@ -64,10 +64,10 @@
 
 <div class="container">
     <h2>Login</h2>
-    <form action="#">
+    <form action="/login" method="POST">
         <div class="form-control">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username">
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" value="<?= old('email') ?>">
         </div>
         <div class="form-control">
             <label for="password">Password</label>
@@ -76,6 +76,16 @@
         <div class="button-container">
             <button type="submit">Login</button>
         </div>
+
+        <ul>
+            <?php if (isset($errors['email'])) { ?>
+            <p style="color: red; margin-top: 4px"><?= $errors['email'] ?></p>
+            <?php } ?>
+
+            <?php if (isset($errors['password'])) { ?>
+            <p style="color: red; margin-top: 4px"><?= $errors['password'] ?></p>
+            <?php } ?>
+        </ul>
     </form>
 </div>
 

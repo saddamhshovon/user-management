@@ -16,6 +16,11 @@ class Validator
         return filter_var($value, FILTER_VALIDATE_EMAIL);
     }
 
+    public static function passwordConfirm(string $value, string $confirm): bool
+    {
+        return $value === $confirm;
+    }
+
     public static function emailAlreadyExists(string $value, $id = null): bool
     {
         $db = App::resolve(Database::class);

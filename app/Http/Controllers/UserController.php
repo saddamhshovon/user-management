@@ -29,8 +29,8 @@ class UserController
 
             if ($search) {
                 $query .= ' WHERE username LIKE ? OR email LIKE ?';
-                $params[] = '%' . $search . '%';
-                $params[] = '%' . $search . '%';
+                $params[] = '%'.$search.'%';
+                $params[] = '%'.$search.'%';
             }
 
             $query .= ' LIMIT ? OFFSET ?';
@@ -44,8 +44,8 @@ class UserController
             $countParams = [];
             if ($search) {
                 $countQuery .= ' WHERE username LIKE ? OR email LIKE ?';
-                $countParams[] = '%' . $search . '%';
-                $countParams[] = '%' . $search . '%';
+                $countParams[] = '%'.$search.'%';
+                $countParams[] = '%'.$search.'%';
             }
 
             $totalUsers = $this->db->query($countQuery, $countParams)->find()['count'];
@@ -58,7 +58,6 @@ class UserController
                 'search' => htmlspecialchars($search),
             ]);
         } catch (\Throwable $th) {
-            dd($th);
             abort(500, ['message' => $th->getMessage()]);
         }
     }

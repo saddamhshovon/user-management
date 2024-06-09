@@ -64,18 +64,34 @@
 
 <div class="container">
     <h2>Register</h2>
-    <form action="#">
+    <form action="/register" method="POST">
         <div class="form-control">
+            <?php if (isset($errors['username'])) { ?>
+            <p style="color: red; margin-top: 4px"><?= $errors['username'] ?></p>
+            <?php } ?>
             <label for="username">Username</label>
-            <input type="text" id="username" name="username">
+            <input type="text" id="username" name="username" value="<?= old('username') ?>" placeholder="username" required>
         </div>
         <div class="form-control">
+            <?php if (isset($errors['email'])) { ?>
+            <p style="color: red; margin-top: 4px"><?= $errors['email'] ?></p>
+            <?php } ?>
             <label for="email">Email</label>
-            <input type="email" id="email" name="email">
+            <input type="email" id="email" name="email" value="<?= old(key: 'email') ?>" placeholder="email@example.com" required>
         </div>
         <div class="form-control">
+            <?php if (isset($errors['password'])) { ?>
+            <p style="color: red; margin-top: 4px"><?= $errors['password'] ?></p>
+            <?php } ?>
             <label for="password">Password</label>
-            <input type="password" id="password" name="password">
+            <input type="password" id="password" name="password" placeholder="password" required>
+        </div>
+        <div class="form-control">
+            <?php if (isset($errors['password_confirm'])) { ?>
+            <p style="color: red; margin-top: 4px"><?= $errors['password_confirm'] ?></p>
+            <?php } ?>
+            <label for="password_confirm">Password confirmation</label>
+            <input type="password" id="password_confirm" name="password_confirm" placeholder="password" required>
         </div>
         <div class="button-container">
             <button type="submit">Register</button>
