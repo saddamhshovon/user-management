@@ -5,107 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create User</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
+        * {
+            font-family: Arial, "sans-serif";
             margin: 0;
+            padding: 0;
+            border: 0;
+            box-sizing: border-box;
+        }
+        .bg-gray {
+            background-color: #f5f5f5;
+        }
+        .nav {
+            background-color: #007bff;
+            padding: 1.5rem 0;
+        }
+        .right {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            justify-content: end;
         }
-        .user-edit {
-            width: 90%;
-            max-width: 400px;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-        }
-        .user-edit h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        .user-edit label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .user-edit input, .user-edit select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        .user-edit input:focus, .user-edit select:focus {
-            border-color: #007BFF;
-        }
-        .user-edit button {
-            width: 100%;
-            padding: 10px;
+        .logout {
+            text-decoration: none;
+            padding: .5rem 1.5rem;
             background-color: #007BFF;
             color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border: .1rem solid #fff;
+            border-radius: .5rem;
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        .user-edit button:hover {
+        .logout:hover {
             background-color: #0056b3;
         }
-        .back-link {
-            text-align: center;
-            margin-top: 20px;
+        .container {
+            width: 80%;
+            margin: 0 auto;
         }
-        .back-link a {
-            text-decoration: none;
-            color: #007BFF;
-            font-size: 16px;
+        .x-center{
+            display: flex;
+            justify-content: center;
         }
-        .back-link a:hover {
-            text-decoration: underline;
+        .card {
+            width: 50%;
+            background-color: #fff;
+            padding: 4rem 2rem;
+            border-radius: 1rem;
+        }
+        .mt-5 {
+            margin-top: 5rem;
+        }
+        .heading {
+            color: #007bff;
+            margin-bottom: 1rem;
+        }
+        .form-control {
+            margin-bottom: 20px;
+        }
+        .form-control label {
+            display: block;
+            margin-bottom: .5rem;
+            color: #555;
+        }
+        .form-control input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .form-control select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .button-container {
+            text-align: right;
+        }
+        .button-container button {
+            padding: .5rem 1.5rem;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: .5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button-container button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+        .back {
+            text-align: left;
+        }
+        .error {
+            text-align: left;
+            font-size: small;
+            color: red;
+            padding: .5rem;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray">
 
-<div class="user-edit">
-    <h2>Create User</h2>
-    <form action="/users" method="POST">
-        <?php if (isset($errors['username'])) {?>
-        <p style="color: red; margin-top: 4px"><?= $errors['username'] ?></p>
-        <?php } ?>
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Username" value="<?= old('username') ?>" required>
-            
-        <?php if (isset($errors['email'])) { ?>
-        <p style="color: red; margin-top: 4px"><?= $errors['email'] ?></p>
-        <?php } ?>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="email@example.com" value="<?= old('email') ?>" required>
-        
-        <?php if (isset($errors['role'])) { ?>
-        <p style="color: red; margin-top: 4px"><?= $errors['role'] ?></p>
-        <?php } ?>
-        <label for="role">Role</label>
-        <select id="role" name="role" required>
-            <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == App\Enums\Role::Admin->value) { ?>
-            <option value="admin" >Admin</option>
-            <?php } ?>
-            <option value="moderator" >Moderator</option>
-            <option value="user" >User</option>
-        </select>
-        
-        <button type="submit">Submit</button>
-    </form>
-    <div class="back-link">
-        <a href="/users">Back to User Table</a>
+<?php require base_path('resources/views/partials/navbar.php')?>
+
+<div class="container x-center">
+    <div class="card mt-5">
+        <h1 class="heading">Create User</h1>
+        <form action="/users" method="POST">
+            <div class="form-control">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Username" value="<?= old('username') ?>" required>
+                <?php if (isset($errors['username'])) {?>
+                <p class="error"><?= $errors['username'] ?></p>
+                <?php } ?>
+            </div>
+
+            <div class="form-control">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="email@example.com" value="<?= old('email') ?>" required>
+                <?php if (isset($errors['email'])) { ?>
+                <p class="error"><?= $errors['email'] ?></p>
+                <?php } ?>
+            </div>
+
+            <div class="form-control">
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == App\Enums\Role::Admin->value) { ?>
+                <option value="admin" >Admin</option>
+                <?php } ?>
+                <option value="moderator" >Moderator</option>
+                <option value="user" >User</option>
+                </select>
+                <?php if (isset($errors['role'])) { ?>
+                <p class="error"><?= $errors['role'] ?></p>
+                <?php } ?>
+            </div>
+
+            <div class="button-container">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+        <div class="back">
+            <a href="/users">Back to User Table</a>
+        </div>
     </div>
 </div>
 

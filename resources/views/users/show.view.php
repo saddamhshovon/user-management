@@ -5,170 +5,219 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User View</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
+        * {
+            font-family: Arial, "sans-serif";
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            border: 0;
+            box-sizing: border-box;
+        }
+        .bg-gray {
+            background-color: #f5f5f5;
+        }
+        .nav {
+            background-color: #007bff;
+            padding: 1.5rem 0;
+        }
+        .right {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            justify-content: end;
+        }
+        .logout {
+            text-decoration: none;
+            padding: .5rem 1.5rem;
+            background-color: #007BFF;
+            color: #fff;
+            border: .1rem solid #fff;
+            border-radius: .5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .logout:hover {
+            background-color: #0056b3;
         }
         .container {
-            width: 100%;
-            max-width: 600px; /* Adjusted maximum width */
+            width: 80%;
+            margin: 0 auto;
+        }
+        .x-center{
+            display: flex;
+            justify-content: center;
+        }
+        .card {
+            width: 50%;
             background-color: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow */
-            padding: 40px; /* Increased padding */
+            padding: 4rem 2rem;
+            border-radius: 1rem;
         }
-        .user-info {
-            margin-bottom: 30px;
+        .mt-5 {
+            margin-top: 5rem;
         }
-        .user-info h2 {
-            color: #007BFF;
-            margin-bottom: 10px;
+        .mt-1 {
+            margin-top: 1rem;
         }
-        .user-info p {
-            margin: 0;
+        .mb-1 {
+            margin-bottom: 1rem;
+        }
+        .relative {
+            position: relative;
+        }
+        .back {
+            text-decoration: none;
+            padding: .5rem 1.5rem;
+            background-color: #007BFF;
+            color: #fff;
+            border: .1rem solid #fff;
+            border-radius: .5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .back:hover {
+            background-color: #0056b3;
+        }
+        .heading {
+            color: #007bff;
+            margin-bottom: 1rem;
+        }
+        .center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .user-table-container {
+            background-color: #fff;
+        }
+        .user-table {
+            border-collapse: collapse;
+        }
+        .user-table th, .user-table td {
+            padding: 1rem 2rem;
+            border: .1rem solid #ddd;
+            color: #333;
+            font-size: medium;
+            text-align: left;
+        }
+        .user-table th {
+            background-color: #007BFF;
+            color: #fff;
+        }
+        .user-table td {
+            background-color: #f9f9f9;
+        }
+        .user-table tr:hover td {
+            background-color: #e6e6e6;
         }
         .button-container {
-            text-align: center;
-        }
-        .button-container a, .button-container button {
             display: inline-block;
-            padding: 10px 20px;
+        }
+        .edit {
+            text-decoration: none;
+            padding: .5rem 1.5rem;
             background-color: #007BFF;
             color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
+            border: .1rem solid #fff;
+            border-radius: .5rem;
+            cursor: pointer;
             transition: background-color 0.3s;
-            margin-right: 10px;
         }
-        .button-container a:hover, .button-container button:hover {
-            background-color: #0056b3; /* Darker shade on hover */
+        .edit:hover {
+            background-color: #0056b3;
         }
-        .btn-delete {
-            background-color: #dc3545; /* Red color for delete button */
+        .delete {
+            padding: .5rem 1.5rem;
+            background-color: red;
+            color: #fff;
+            border: .1rem solid #fff;
+            border-radius: .5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        .btn-delete:hover {
-            background-color: #c82333; /* Darker shade on hover */
+        .delete:hover {
+            background-color: darkred;
         }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
+        dialog::backdrop {
+            background-color: black;
+            opacity: 0.5;
+        }
+        #modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 2rem;
+            border-radius: 1rem;
         }
         .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 20px;
-            border-radius: 5px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow */
-        }
-        .modal button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            border: none;
-        }
-        .modal button:hover {
-            background-color: #0056b3; /* Darker shade on hover */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray">
 
-<div class="container">
-    <a href="/users" class="btn">Back</a>
-    <div class="user-info">
-        <h2>User Information</h2>
-        <p><strong>Id:</strong> <?= $user['id'] ?></p>
-        <p><strong>Username:</strong> <?= $user['username'] ?></p>
-        <p><strong>Email:</strong> <?= $user['email'] ?></p>
-        <p><strong>Role:</strong> <?= strtoupper($user['role']) ?></p>
+<?php require base_path('resources/views/partials/navbar.php')?>
+
+<div class="container x-center relative">
+    <div class="card mt-5">
+        <a href="/users" class="back">Back</a>
+        <div class="center">
+            <h1 class="heading mt-1">User Information</h1>
+            <div class="user-table-container">
+                <table class="user-table">
+                <tr>
+                    <th>Id:</th>
+                    <td><?= $user['id'] ?></td>
+                </tr>
+                <tr>
+                    <th>Username:</th>  
+                    <td><?= $user['username'] ?></td>      
+                </tr>  
+                <tr>
+                    <th>Email:</th>  
+                    <td><?= $user['email'] ?></td>      
+                </tr>
+                <tr>
+                    <th>Role:</th>  
+                    <td><?= strtoupper($user['role']) ?></td>      
+                </tr>
+                </table>
+            </div>
+            <?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] == App\Enums\Role::Admin->value || $_SESSION['user']['id'] == $user['id'])) { ?>        
+            <div class="button-container mt-1">
+                <button onclick="window.location.href='/users/edit/<?= $user['id'] ?>'" class="edit">Edit</button>
+                <button id="delete" class="delete" >Delete</button> <!-- Red color for delete button -->
+            </div>
+            <?php } ?>
+        </div>
     </div>
-    <?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] == App\Enums\Role::Admin->value || $_SESSION['user']['id'] == $user['id'])) { ?>        
-    <div class="button-container">
-        <a href="/users/edit/<?= $user['id'] ?>">Edit</a>
-        <button id="deleteBtn" class="btn-delete" style="background-color: red">Delete</button> <!-- Red color for delete button -->
-    </div>
-    <?php } ?>
 </div>
 
-<!-- Modal -->
-<div id="myModal" class="modal">
+<dialog id="modal">
     <div class="modal-content">
         <p>Are you sure you want to delete?</p>
-        <button id="confirmBtn">Confirm</button>
-        <button id="cancelBtn" style="background-color: red">Cancel</button>
+        <div class="button-container mt-1">
+            <form action='/users/<?= $user['id'] ?>' style="display: inline-block;" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="edit">Confirm</button>
+            </form>
+            <button id="cancel" class="delete">Cancel</button>
+        </div>
     </div>
-</div>
+</dialog>
 
 <script>
-    // Get the modal
-    let modal = document.getElementById("myModal");
+    const dialog = document.querySelector("#modal");
+    const showButton = document.querySelector("#delete");
+    const closeButton = document.querySelector("#cancel");
 
-    // Get the button that opens the modal
-    let btn = document.getElementById("deleteBtn");
+    showButton.addEventListener("click", () => {
+        dialog.showModal();
+    });
 
-    // Get the <span> element that closes the modal
-    let cancelBtn = document.getElementById("cancelBtn");
-
-    // When the user clicks on the delete button, open the modal
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
-
-    // When the user clicks on <span> (x) or cancel button, close the modal
-    cancelBtn.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    // Get the confirm button inside the modal
-    var confirmBtn = document.getElementById("confirmBtn");
-
-    // When the user clicks on the confirm button, submit the form
-    confirmBtn.onclick = function() {
-        // Get the form
-        var form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/users/<?= $user['id'] ?>';
-        form.style.display = 'none';
-
-        // Add method input
-        var methodInput = document.createElement('input');
-        methodInput.type = 'hidden';
-        methodInput.name = '_method';
-        methodInput.value = 'DELETE';
-        form.appendChild(methodInput);
-
-        // Append the form to the body
-        document.body.appendChild(form);
-
-        // Submit the form
-        form.submit();
-    }
+    closeButton.addEventListener("click", () => {
+        dialog.close();
+    });
 </script>
 
 </body>

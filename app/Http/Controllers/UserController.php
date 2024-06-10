@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Core\App;
-use App\Core\Database;
+use App\Enums\Role;
 use App\Core\Session;
+use App\Core\Database;
+use App\Core\Authenticator;
+use App\Traits\HasAuthorization;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 
 class UserController
 {
+    use HasAuthorization;
     private Database $db;
 
     public function __construct()
@@ -19,6 +23,8 @@ class UserController
 
     public function index()
     {
+        $this->authorize([Role::Admin->value, Role::Moderator->value, Role::User->value]);
+
         $perPage = 10;
         $page = $_GET['page'] ?? 1;
         $search = $_GET['search'] ?? '';
@@ -64,11 +70,15 @@ class UserController
 
     public function create()
     {
+        $this->authorize([Role::Admin->value, Role::Moderator->value]);
+
         return view('users/create', ['errors' => Session::get('errors')]);
     }
 
     public function store()
     {
+        $this->authorize([Role::Admin->value, Role::Moderator->value]);
+
         $request = UserCreateRequest::validate(
             $attributes = [
                 'username' => $_POST['username'],
@@ -96,6 +106,8 @@ class UserController
 
     public function show($id)
     {
+        $this->authorize([Role::Admin->value, Role::Moderator->value, Role::User->value]);
+
         try {
             $user = $this->db->query(
                 'SELECT id, username, email, role FROM users WHERE id = :id',
@@ -117,6 +129,8 @@ class UserController
 
     public function edit($id)
     {
+        $this->authorize([Role::Admin->value, Role::Moderator->value, Role::User->value], $id);
+
         try {
             $user = $this->db->query(
                 'SELECT id, username, email, role FROM users WHERE id = :id',
@@ -137,6 +151,8 @@ class UserController
 
     public function update($id)
     {
+        $this->authorize([Role::Admin->value, Role::Moderator->value, Role::User->value], $id);
+
         $request = UserUpdateRequest::validate(
             $attributes = [
                 'username' => $_POST['username'],
@@ -156,6 +172,14 @@ class UserController
                     'id' => $id,
                 ]
             );
+
+            // User info changed, so they need to login again to reset permission.
+            if($_SESSION['user']['id'] == $id) {
+                (new Authenticator)->logout();
+                
+                redirect('/');
+            }
+
             redirect('/users');
         } catch (\Throwable $th) {
             abort(500, ['message' => $th->getMessage()]);
@@ -164,6 +188,8 @@ class UserController
 
     public function delete($id)
     {
+        $this->authorize([Role::Admin->value, Role::Moderator->value, Role::User->value], $id);
+
         try {
             $user = $this->db->query(
                 'DELETE FROM users WHERE id = :id',
@@ -174,6 +200,13 @@ class UserController
 
             if (! $user) {
                 abort(404, ['message' => 'User not found.']);
+            }
+
+            // User info changed, so they need to login again to reset permission.
+            if($_SESSION['user']['id'] == $id) {
+                (new Authenticator)->logout();
+                
+                redirect('/');
             }
 
             redirect('/users');

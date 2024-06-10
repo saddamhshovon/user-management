@@ -5,40 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>500 Internal Server Error</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
+        * {
+            font-family: Arial, "sans-serif";
             margin: 0;
             padding: 0;
+            border: 0;
+            box-sizing: border-box;
+        }
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
+        .bg-gray {
+            background-color: #f5f5f5;
+        }
         .container {
+            width: 80%;
+            margin: 0 auto;
             text-align: center;
         }
         h1 {
-            font-size: 60px;
+            font-size: 5rem;
             color: #007BFF;
-            margin-bottom: 20px;
+            margin-bottom: 1rem;
         }
         p {
-            font-size: 18px;
+            font-size: 1rem;
             color: #555;
-            margin-bottom: 40px;
+            margin-bottom: 2rem;
         }
         a {
             display: inline-block;
-            padding: 10px 20px;
+            padding: .5rem 1rem;
             background-color: #007BFF;
             color: #fff;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 1rem;
             transition: background-color 0.3s;
         }
         a:hover {
             background-color: #0056b3; /* Darker shade on hover */
+        }
+        .error {
+            color: red;
         }
     </style>
 </head>
@@ -48,7 +59,7 @@
     <h1>500</h1>
     <p>Oops! Something went wrong .</p>
     <?php if ($message) { ?>
-    <p><?= $message ?></p>
+    <p class="error"><?= $message ?></p>
     <?php } ?>
     <a href="/">Go Home</a>
 </div>

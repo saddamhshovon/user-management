@@ -5,35 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
+        * {
+            font-family: Arial, "sans-serif";
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            padding: 0;
+            border: 0;
+            box-sizing: border-box;
+        }
+        .bg-gray {
+            background-color: #f5f5f5;
         }
         .container {
-            width: 100%;
-            max-width: 400px; /* Adjusted maximum width */
-            background-color: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow */
-            padding: 40px; /* Increased padding */
+            width: 80%;
+            margin: 0 auto;
         }
-        h2 {
-            color: #007BFF;
-            margin-bottom: 30px; /* Increased margin-bottom */
+        .x-center{
+            display: flex;
+            justify-content: center;
+        }
+        .card {
+            width: 50%;
+            background-color: #fff;
+            padding: 4rem 2rem;
+            border-radius: 1rem;
+        }
+        .mt-5 {
+            margin-top: 5rem;
+        }
+        .heading {
+            color: #007bff;
+            margin-bottom: 1rem;
         }
         .form-control {
-            margin-bottom: 20px; /* Increased margin-bottom */
+            margin-bottom: 20px;
         }
         .form-control label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: .5rem;
             color: #555;
         }
         .form-control input {
@@ -43,60 +51,71 @@
             border: 1px solid #ddd;
         }
         .button-container {
-            text-align: center;
+            text-align: right;
         }
         .button-container button {
-            padding: 10px 20px;
+            padding: .5rem 1.5rem;
             background-color: #007BFF;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: .5rem;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-right: 10px;
         }
         .button-container button:hover {
             background-color: #0056b3; /* Darker shade on hover */
         }
+        .login {
+            text-align: left;
+        }
+        .error {
+            text-align: left;
+            font-size: small;
+            color: red;
+            padding: .5rem;
+        }
     </style>
 </head>
-<body>
+<body class="bg-gray">
 
-<div class="container">
-    <h2>Register</h2>
-    <form action="/register" method="POST">
-        <div class="form-control">
-            <?php if (isset($errors['username'])) { ?>
-            <p style="color: red; margin-top: 4px"><?= $errors['username'] ?></p>
-            <?php } ?>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" value="<?= old('username') ?>" placeholder="username" required>
-        </div>
-        <div class="form-control">
-            <?php if (isset($errors['email'])) { ?>
-            <p style="color: red; margin-top: 4px"><?= $errors['email'] ?></p>
-            <?php } ?>
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?= old(key: 'email') ?>" placeholder="email@example.com" required>
-        </div>
-        <div class="form-control">
-            <?php if (isset($errors['password'])) { ?>
-            <p style="color: red; margin-top: 4px"><?= $errors['password'] ?></p>
-            <?php } ?>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="password" required>
-        </div>
-        <div class="form-control">
-            <?php if (isset($errors['password_confirm'])) { ?>
-            <p style="color: red; margin-top: 4px"><?= $errors['password_confirm'] ?></p>
-            <?php } ?>
-            <label for="password_confirm">Password confirmation</label>
-            <input type="password" id="password_confirm" name="password_confirm" placeholder="password" required>
-        </div>
-        <div class="button-container">
-            <button type="submit">Register</button>
-        </div>
-    </form>
+<div class="container x-center">
+    <div class="card mt-5">
+        <h1 class="heading">Register</h1>
+        <form action="/register" method="POST">
+            <div class="form-control">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="<?= old('username') ?>" placeholder="username" required>
+                <?php if (isset($errors['username'])) { ?>
+                <p style="color: red; margin-top: 4px"><?= $errors['username'] ?></p>
+                <?php } ?>
+            </div>
+            <div class="form-control">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="<?= old(key: 'email') ?>" placeholder="email@example.com" required>
+                <?php if (isset($errors['email'])) { ?>
+                <p class="error"><?= $errors['email'] ?></p>
+                <?php } ?>
+            </div>
+            <div class="form-control">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="password" required>
+                <?php if (isset($errors['password'])) { ?>
+                <p class="error"><?= $errors['password'] ?></p>
+                <?php } ?>
+            </div>
+            <div class="form-control">
+                <label for="password_confirm">Password confirmation</label>
+                <input type="password" id="password_confirm" name="password_confirm" placeholder="password" required>
+                <?php if (isset($errors['password_confirm'])) { ?>
+                <p class="error"><?= $errors['password_confirm'] ?></p>
+                <?php } ?>
+            </div>
+            <div class="button-container">
+                <button type="submit">Register</button>
+            </div>
+        </form>
+        <p class="login">Already have an account? <a href="/">Login</a></p>
+    </div>
 </div>
 
 </body>
