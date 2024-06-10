@@ -78,7 +78,7 @@
 <div class="user-edit">
     <h2>Create User</h2>
     <form action="/users" method="POST">
-        <?php if (isset($errors['username'])) { ?>
+        <?php if (isset($errors['username'])) {?>
         <p style="color: red; margin-top: 4px"><?= $errors['username'] ?></p>
         <?php } ?>
         <label for="username">Username</label>
@@ -95,7 +95,9 @@
         <?php } ?>
         <label for="role">Role</label>
         <select id="role" name="role" required>
+            <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == App\Enums\Role::Admin->value) { ?>
             <option value="admin" >Admin</option>
+            <?php } ?>
             <option value="moderator" >Moderator</option>
             <option value="user" >User</option>
         </select>

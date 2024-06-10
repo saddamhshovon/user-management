@@ -101,10 +101,12 @@
         <p><strong>Email:</strong> <?= $user['email'] ?></p>
         <p><strong>Role:</strong> <?= strtoupper($user['role']) ?></p>
     </div>
+    <?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] == App\Enums\Role::Admin->value || $_SESSION['user']['id'] == $user['id'])) { ?>        
     <div class="button-container">
         <a href="/users/edit/<?= $user['id'] ?>">Edit</a>
         <button id="deleteBtn" class="btn-delete" style="background-color: red">Delete</button> <!-- Red color for delete button -->
     </div>
+    <?php } ?>
 </div>
 
 <!-- Modal -->

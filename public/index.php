@@ -12,6 +12,9 @@ require BASE_PATH.'vendor/autoload.php';
 require BASE_PATH.'helpers/helpers.php';
 require BASE_PATH.'bootstrap/app.php';
 
+$dotenv = Dotenv\Dotenv::createImmutable(BASE_PATH);
+$dotenv->load();
+
 $router = new Router();
 require BASE_PATH.'routes/web.php';
 

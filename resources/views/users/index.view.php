@@ -105,6 +105,11 @@
 <body>
 
 <div class="container">
+    <div>
+        <form action="/logout" method="POST">
+            <input type="submit" value="Logout">
+        </form>
+    </div>
     <div class="search-create-container">
         <a class="create-link" href="/users/create">Create</a>
         <form class="search" action="/users" method="GET">

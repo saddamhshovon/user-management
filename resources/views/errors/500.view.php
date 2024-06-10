@@ -46,7 +46,10 @@
 
 <div class="container">
     <h1>500</h1>
-    <p>Oops! Something went wrong on our servers.</p>
+    <p>Oops! Something went wrong .</p>
+    <?php if ($message) { ?>
+    <p><?= $message ?></p>
+    <?php } ?>
     <a href="/">Go Home</a>
 </div>
 
