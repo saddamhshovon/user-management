@@ -134,7 +134,9 @@
                     <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == App\Enums\Role::Admin->value) { ?>
                     <option value="admin" <?= ($user['role'] === 'admin') ? 'selected' : '' ?> >Admin</option>
                     <?php } ?>
+                    <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] != App\Enums\Role::User->value) { ?>
                     <option value="moderator" <?= ($user['role'] === 'moderator') ? 'selected' : '' ?> >Moderator</option>
+                    <?php } ?>
                     <option value="user" <?= ($user['role'] === 'user') ? 'selected' : '' ?> >User</option>
                 </select>
                 <?php if (isset($errors['role'])) { ?>
