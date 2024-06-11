@@ -34,7 +34,7 @@ class RegistrationController
         ]);
 
         try {
-            $user = $this->db->query(
+            $this->db->query(
                 'INSERT INTO users (username, email, password) VALUES (:username, :email, :password)',
                 [
                     ':username' => $attributes['username'],
@@ -43,7 +43,14 @@ class RegistrationController
                 ]
             );
 
-            (new Authenticator)->login(['email' => $$attributes['email']]);
+            $user = $this->db->query(
+                'SELECT id, username, email, role FROM users WHERE email = :email',
+                [
+                    ':email' => $attributes['email'],
+                ]
+            )->find();
+
+            (new Authenticator)->login($user);
 
             redirect('/users');
         } catch (\Throwable $th) {
