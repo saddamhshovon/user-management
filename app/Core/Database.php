@@ -21,8 +21,8 @@ class Database
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_EMULATE_PREPARES => false,
             ]);
-        } catch(\PDOException $e) {
-            abort(500, ['message' => $e->getMessage()]);
+        } catch (\PDOException $e) {
+            abort(Response::INTERNAL_SERVER_ERROR, ['message' => $e->getMessage()]);
         }
     }
 

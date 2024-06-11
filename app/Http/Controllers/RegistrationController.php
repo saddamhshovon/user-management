@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Core\App;
 use App\Core\Authenticator;
 use App\Core\Database;
+use App\Core\Response;
 use App\Core\Session;
 use App\Http\Requests\RegistrationRequest;
 
@@ -54,7 +55,7 @@ class RegistrationController
 
             redirect('/users');
         } catch (\Throwable $th) {
-            abort(500, ['message' => $th->getMessage()]);
+            abort(Response::NOT_FOUND, ['message' => $th->getMessage()]);
         }
 
     }

@@ -17,7 +17,7 @@ function urlIs(string $value): bool
     return $_SERVER['REQUEST_URI'] === $value;
 }
 
-function abort(int $code = 404, array $attributes = []): never
+function abort(int $code = Response::NOT_FOUND, array $attributes = []): never
 {
     http_response_code($code);
     extract($attributes);

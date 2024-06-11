@@ -6,9 +6,9 @@ use App\Http\Middleware\Middleware;
 
 class Router
 {
-    protected $routes = [];
+    protected array $routes = [];
 
-    private function add(string $httpMethod, string $uri, array $controller)
+    private function add(string $httpMethod, string $uri, array $controller): static
     {
         $this->routes[] = [
             'uri' => $uri,
@@ -20,49 +20,65 @@ class Router
         return $this;
     }
 
-    public function get(string $uri, array $controller)
+    public function get(string $uri, array $controller): Router
     {
         return $this->add('GET', $uri, $controller);
     }
 
-    public function post(string $uri, array $controller)
+    public function post(string $uri, array $controller): Router
     {
         return $this->add('POST', $uri, $controller);
     }
 
-    public function delete(string $uri, array $controller)
+    public function delete(string $uri, array $controller): Router
     {
         return $this->add('DELETE', $uri, $controller);
     }
 
-    public function patch(string $uri, array $controller)
+    public function patch(string $uri, array $controller): Router
     {
         return $this->add('PATCH', $uri, $controller);
     }
 
-    public function put(string $uri, array $controller)
+    public function put(string $uri, array $controller): Router
     {
         return $this->add('PUT', $uri, $controller);
     }
 
-    public function middleware(string $key)
+    public function middleware(string $key): static
     {
         $this->routes[array_key_last($this->routes)]['middleware'] = $key;
 
         return $this;
     }
 
-    public function route(string $uri, string $httpMethod)
+    /**
+     * This method is called after the project is bootstrapped
+     * and ready to serve responses according to requested routes.
+     */
+    public function route(string $uri, string $httpMethod): mixed
     {
         foreach ($this->routes as $route) {
-            // Prepare regular expression pattern to match dynamic segments
+            /**
+             * Replaces registered route pattern with string '/(\w+)' to generate the pattern.
+             * Example: 'users/{id}' -> 'users/(\w+)'
+             */
             $pattern = preg_replace('/\/{\w+}/', '/(\w+)', $route['uri']);
+
+            /**
+             * Replaces '/' with '\/'
+             */
             $pattern = str_replace('/', '\/', $pattern);
             $pattern = '/^'.$pattern.'$/';
 
-            // Check if URI matches the pattern and HTTP method matches
+            /**
+             * Checks if the pattern matches with the parsed uri & if the methods matches.
+             */
             if (preg_match($pattern, $uri, $matches) && $route['httpMethod'] === strtoupper($httpMethod)) {
-                array_shift($matches); // Remove full match
+                /**
+                 * Shifts the first index as it contains the parsed uri.
+                 */
+                array_shift($matches);
 
                 Middleware::resolve($route['middleware']);
                 [$class, $classMethod] = $route['controller'];
@@ -70,14 +86,17 @@ class Router
                 if (class_exists($class) && method_exists($class, $classMethod)) {
                     $controllerInstance = new $class();
 
-                    // Call controller method with dynamic parameters
+                    /**
+                     * Creates an instance of the registered class &
+                     * calls the registered method while passing the params.
+                     */
                     return call_user_func_array([$controllerInstance, $classMethod], $matches);
                 }
                 throw new \Exception("No matching controller found for key '{$class}'.");
             }
         }
 
-        abort(404);
+        abort(Response::NOT_FOUND);
     }
 
     public function previousUrl(): string

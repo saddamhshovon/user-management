@@ -171,7 +171,7 @@
                 </tr>
                 <tr>
                     <th>Username:</th>  
-                    <td><?= $user['username'] ?></td>      
+                    <td><?= htmlspecialchars($user['username']) ?></td>      
                 </tr>  
                 <tr>
                     <th>Email:</th>  

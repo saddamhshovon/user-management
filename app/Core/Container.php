@@ -6,17 +6,22 @@ use Exception;
 
 class Container
 {
-    protected $bindings = [];
+    protected array $bindings = [];
 
-    public function bind($key, $resolver): void
+    /**
+     * Binds classes with their resolvers.
+     */
+    public function bind(string $key, mixed $resolver): void
     {
         $this->bindings[$key] = $resolver;
     }
 
     /**
+     * Resolves container binding.
+     *
      * @throws Exception
      */
-    public function resolve($key): mixed
+    public function resolve(string $key): mixed
     {
         if (! array_key_exists($key, $this->bindings)) {
             throw new Exception("No matching binding found for {$key}");

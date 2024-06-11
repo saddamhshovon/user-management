@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Core\App;
-use App\Enums\Role;
-use App\Core\Session;
-use App\Core\Database;
 use App\Core\Authenticator;
-use App\Traits\HasAuthorization;
+use App\Core\Database;
+use App\Core\Response;
+use App\Core\Session;
+use App\Enums\Role;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Traits\HasAuthorization;
+use Throwable;
 
 class UserController
 {
     use HasAuthorization;
+
     private Database $db;
 
     public function __construct()
@@ -63,8 +66,8 @@ class UserController
                 'totalPages' => $totalPages,
                 'search' => htmlspecialchars($search),
             ]);
-        } catch (\Throwable $th) {
-            abort(500, ['message' => $th->getMessage()]);
+        } catch (Throwable $th) {
+            abort(Response::INTERNAL_SERVER_ERROR, ['message' => $th->getMessage()]);
         }
     }
 
@@ -98,8 +101,8 @@ class UserController
                 ]
             );
             redirect('/users');
-        } catch (\Throwable $th) {
-            abort(500, ['message' => $th->getMessage()]);
+        } catch (Throwable $th) {
+            abort(Response::INTERNAL_SERVER_ERROR, ['message' => $th->getMessage()]);
         }
 
     }
@@ -117,13 +120,12 @@ class UserController
             )->find();
 
             if (! $user) {
-                abort(404, ['message' => 'User not found.']);
+                abort(Response::NOT_FOUND, ['message' => 'User not found.']);
             }
 
             return view('users/show', ['user' => $user]);
-        } catch (\Throwable $th) {
-            dd($th);
-            abort(500, ['message' => $th->getMessage()]);
+        } catch (Throwable $th) {
+            abort(Response::INTERNAL_SERVER_ERROR, ['message' => $th->getMessage()]);
         }
     }
 
@@ -140,12 +142,12 @@ class UserController
             )->find();
 
             if (! $user) {
-                abort(404, ['message' => 'User not found.']);
+                abort(Response::NOT_FOUND, ['message' => 'User not found.']);
             }
 
             return view('users/edit', ['user' => $user, 'errors' => Session::get('errors')]);
-        } catch (\Throwable $th) {
-            abort(500, ['message' => $th->getMessage()]);
+        } catch (Throwable $th) {
+            abort(Response::INTERNAL_SERVER_ERROR, ['message' => $th->getMessage()]);
         }
     }
 
@@ -173,16 +175,16 @@ class UserController
                 ]
             );
 
-            // User info changed, so they need to login again to reset permission.
-            if($_SESSION['user']['id'] == $id) {
+            // If user info changed, so they need to login again to reset permission.
+            if ($_SESSION['user']['id'] == $id) {
                 (new Authenticator)->logout();
-                
+
                 redirect('/');
             }
 
             redirect('/users');
-        } catch (\Throwable $th) {
-            abort(500, ['message' => $th->getMessage()]);
+        } catch (Throwable $th) {
+            abort(Response::INTERNAL_SERVER_ERROR, ['message' => $th->getMessage()]);
         }
     }
 
@@ -199,20 +201,19 @@ class UserController
             );
 
             if (! $user) {
-                abort(404, ['message' => 'User not found.']);
+                abort(Response::NOT_FOUND, ['message' => 'User not found.']);
             }
 
             // User info changed, so they need to login again to reset permission.
-            if($_SESSION['user']['id'] == $id) {
+            if ($_SESSION['user']['id'] == $id) {
                 (new Authenticator)->logout();
-                
+
                 redirect('/');
             }
 
             redirect('/users');
-        } catch (\Throwable $th) {
-            dd($th);
-            abort(500, ['message' => $th->getMessage()]);
+        } catch (Throwable $th) {
+            abort(Response::INTERNAL_SERVER_ERROR, ['message' => $th->getMessage()]);
         }
     }
 }

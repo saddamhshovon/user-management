@@ -11,17 +11,23 @@ class App
         static::$container = $container;
     }
 
-    public static function container(): Container
+    private static function container(): Container
     {
         return static::$container;
     }
 
+    /**
+     * Binds classes with their resolvers to the container.
+     */
     public static function bind($key, $resolver): void
     {
         static::container()->bind($key, $resolver);
     }
 
-    public static function resolve($key): mixed
+    /**
+     * Resolves binding from container.
+     */
+    public static function resolve(string $key): mixed
     {
         return static::container()->resolve($key);
     }
