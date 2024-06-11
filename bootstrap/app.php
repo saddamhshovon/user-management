@@ -10,7 +10,9 @@ $container->bind(Database::class, function () {
     $databaseConfig = require base_path('config/database.php');
 
     return new Database(
-        $databaseConfig['mariadb']
+        $databaseConfig['mariadb'],
+        $databaseConfig['mariadb']['username'],
+        $databaseConfig['mariadb']['password']
     );
 });
 
