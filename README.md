@@ -34,10 +34,13 @@ php -S localhost:8000 .\public\index.php
 **Live Url:** http://user-mgmt.ddns.net/
 
 **System Information:**
+
 There are 3 roles available.
+
   1. Admin (Can do everything.)
   2. Moderator (Can create & view)
   3. User (Can view only)
+
 Everyone can change their personal information. (System will logout the user if personal information is changed)
 
 The default password is 'password' for all "created" (not registered) user.
